@@ -1,0 +1,44 @@
+flowchart TD
+    subgraph "Frontend (React)"
+        FE_UI["UI Components"]
+        FE_State["State Management (Redux/Context)"]
+        FE_Auth["Auth Module"]
+        FE_API["API Service Layer"]
+    end
+
+    subgraph "Backend (Node.js/Express)"
+        BE_Entry["Express App Entry"]
+        BE_Auth["Auth Middleware (JWT/Session)"]
+        BE_API["API Routes"]
+        BE_Modules["Business Logic Modules"]
+        BE_ORM["ORM (Sequelize/Prisma)"]
+    end
+
+    subgraph "Database (PostgreSQL)"
+        DB["PostgreSQL"]
+    end
+
+    FE_UI --> FE_State
+    FE_State --> FE_Auth
+    FE_State --> FE_API
+    FE_Auth --> FE_API
+    FE_API -->|REST/GraphQL| BE_Entry
+
+    BE_Entry --> BE_Auth
+    BE_Auth --> BE_API
+    BE_API --> BE_Modules
+    BE_Modules --> BE_ORM
+    BE_ORM --> DB
+
+    classDef api fill:#f9f,stroke:#333,stroke-width:2px;
+    FE_API,BE_API:::api
+
+    classDef auth fill:#bbf,stroke:#333,stroke-width:2px;
+    FE_Auth,BE_Auth:::auth
+
+    %% Notes
+    %% - Frontend communicates with backend via API layer
+    %% - Authentication handled on both frontend (token storage) and backend (JWT/session validation)
+    %% - Backend is modular: routes, business logic, ORM/data access
+    %% - Database is PostgreSQL, accessed via ORM
+    %% - Each layer is decoupled and modular for scalability 
